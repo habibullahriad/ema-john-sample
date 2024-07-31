@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
+
 import "./Shop.css";
 import Product from "../Product/Product";
+import Cart from "../Cart/Cart";
+import { addToDb } from "../../utilities/fakedb";
 const Shop = () => {
   const [products, setProducts] = useState([]);
   const [cart, setCart] = useState([]);
@@ -9,10 +12,13 @@ const Shop = () => {
       .then((res) => res.json())
       .then((data) => setProducts(data));
   }, []);
+  // decaler eventhandler in shop componets
   const handleAddToCart = (product) => {
     // cart.push(product)
     const newCart = [...cart, product];
+    //
     setCart(newCart);
+    addToDb(product.id);
   };
 
   return (
@@ -23,12 +29,12 @@ const Shop = () => {
             key={product.id}
             product={product}
             handleAddToCart={handleAddToCart}
+            // its means handleAddToCart ka Product components e  addTocart e pathai dilam
           ></Product>
         ))}
       </div>
       <div className="cart-container">
-        <h4>oder summery</h4>
-        <p>Selected Items:{cart.length}</p>
+        <Cart cart={cart}></Cart>
       </div>
     </div>
   );
